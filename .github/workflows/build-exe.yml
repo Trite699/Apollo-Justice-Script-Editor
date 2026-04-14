@@ -1,0 +1,29 @@
+name: AJ Script Editor EXE Builder
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore FWSEConverter.sln
+
+      - name: Build Release EXE
+        run: msbuild FWSEConverter.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FWSE-Converter-EXE
+          path: FWSEConverter/bin/Release/
