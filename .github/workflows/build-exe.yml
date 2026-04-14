@@ -1,4 +1,4 @@
-name: AJ Script Editor EXE Builder
+name: Build Apollo Justice Script Editor
 
 on:
   push:
@@ -16,14 +16,19 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
       - name: Restore NuGet packages
-        run: nuget restore FWSEConverter.sln
+        run: nuget restore
 
       - name: Build Release EXE
-        run: msbuild FWSEConverter.sln /p:Configuration=Release /p:Platform="Any CPU"
+        run: msbuild /p:Configuration=Release
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
         with:
-          name: FWSE-Converter-EXE
-          path: FWSEConverter/bin/Release/
+          name: Apollo-Justice-Script-Editor-EXE
+          path: |
+            **/bin/Release/*.exe
+            **/bin/Release/*.dll
